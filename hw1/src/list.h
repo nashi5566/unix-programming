@@ -1,9 +1,6 @@
 #ifndef __LIST_H
 #define __LIST_H
 
-#include "connect.h"
-#include "proc.h"
-
 typedef struct list list;
 struct list{
 	struct _LIST_ENTRY *lNext;
@@ -23,6 +20,9 @@ struct node{
 	int fd;
 	struct __NODE_LIST *nNext;
 };
+
+#include "connect.h"
+#include "proc.h"
 
 list *newList();
 list *append(list *l);

@@ -18,7 +18,6 @@ list *addPID();
 void addInode(list* lHead, char* pid);
 void addCMD(list* lHead, char* pid);
 void addName(list* lHead, char* pid);
-node *inodeSearch(node* nHead, long inode);
 char *split(char* string, int base, int tail);
 
 #endif
