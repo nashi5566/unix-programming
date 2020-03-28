@@ -34,23 +34,25 @@ int main(int argc, char** argv){
 
 		switch(c){
 			case 't':
+		        {
 				printf("List of TCP services:\n ");
-				clist *c = newCList();
-				parse(TCP, "ip4", c);
-				parse(TCP6, "ip6", c);
+				clist *list = newCList();
+				parse(TCP, "ip4", list);
+				parse(TCP6, "ip6", list);
 				puts("PROTOCOL     LOCAL    LOCAL_PORT     FOREGIN    FORE_PORT    INODE   \n");
-				printf("%s       %s    %ld     %s     %ld    %ld\n", "TCP", c->connect->local, c->connect->local_port, c->connect->foregin, c->connect->fore_port, c->connect->inode);
+				printf("%s       %s    %ld     %s     %ld    %ld\n", "TCP", list->connect->local, list->connect->local_port, list->connect->foregin, list->connect->fore_port, list->connect->inode);
 				break;
-
+			}
 			case 'u':
+			{
 				printf("List of UDP services:\n ");
-
-				parse(UDP, "ip4", c);
-				parse(UDP6, "ip6", c);
+                                clist *list = newCList();
+				parse(UDP, "ip4", list);
+				parse(UDP6, "ip6", list);
 				puts("PROTOCOL     LOCAL    LOCAL_PORT     FOREGIN    FORE_PORT    INODE   \n");
-				printf("%s       %s    %ld     %s     %ld    %ld\n", "UDP", c->connect->local, c->connect->local_port, c->connect->foregin, c->connect->fore_port, c->connect->inode);
+				printf("%s       %s    %ld     %s     %ld    %ld\n", "UDP", list->connect->local, list->connect->local_port, list->connect->foregin, list->connect->fore_port, list->connect->inode);
 				break;
-
+			}
 			case 'h':
 				puts("Usage:\n");
 				puts("-t --tcp <service name> : List the states of all the TCP services or the corresponding TCP services.\n");

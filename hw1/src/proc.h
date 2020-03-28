@@ -3,22 +3,25 @@
 
 #define _MAX_LENGTH 1024
 
-#include "list.h"
-#include "connect.h"
+//#include "list.h"
+//#include "connect.h"
+
+struct node;
+struct list;
 
 typedef struct proc proc;
 struct proc{
 	char *pid;
-	node *i;
+	struct node *i;
 	char cmdline[_MAX_LENGTH];
 	char processName[_MAX_LENGTH];
 };
 
-list *addPID();
-void addInode(list* lHead, char* pid);
-void addCMD(list* lHead, char* pid);
-void addName(list* lHead, char* pid);
-node *inodeSearch(node* nHead, long inode);
+struct list *addPID();
+void addInode(struct list* lHead, char* pid);
+void addCMD(struct list* lHead, char* pid);
+void addName(struct list* lHead, char* pid);
+struct node *inodeSearch(struct node* nHead, long inode);
 char *split(char* string, int base, int tail);
 
 #endif

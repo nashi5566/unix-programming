@@ -4,6 +4,7 @@
 #include<ctype.h>
 #include<unistd.h>
 #include<sys/types.h>
+#include<sys/stat.h>
 #include<dirent.h>
 
 #include "proc.h"
@@ -14,8 +15,8 @@
 #define PROC_NAME "/comm"
 
 	
-list *addPID(){
-	List *pList = newList();
+struct list *addPID(){
+	struct list *pList = newList();
 	struct stat file_state;
 	DIR *dir_pid;
 	struct dirent *dp;
@@ -26,11 +27,11 @@ list *addPID(){
 	}
 
 	while((dp = readdir(dir_pid)) != NULL){
-		lstate(dp->d_name, &file_state);
+		lstat(dp->d_name, &file_state);
 		if(!strcmp(".", dp->d_name) || !strcmp("..", dp->d_name)){
 			continue;
 		}
-		else if(S_ISDIR(file_state->st_mode) && isdigit(*(dp->d_name))){
+		else if(S_ISDIR(file_state.st_mode) && isdigit(*(dp->d_name))){
 			pList->process->pid = dp->d_name;
 			append(pList);
 			addCMD(pList, pList->process->pid);
@@ -44,7 +45,7 @@ list *addPID(){
 	return pList;
 }
 
-void addCMD(list* lHead, char *pid){
+void addCMD(struct list* lHead, char *pid){
 	char path[40] = PATH;
 	char tmp[256];
 	while(lHead != NULL){
@@ -62,7 +63,7 @@ void addCMD(list* lHead, char *pid){
 	}
 }
 
-void addName(list* lHead, char *pid){
+void addName(struct list* lHead, char *pid){
 	char path[40] = PATH;
 	while(lHead != NULL){
 		if(!strcmp(lHead->process->pid, pid)){
@@ -76,7 +77,7 @@ void addName(list* lHead, char *pid){
 	}
 }
 
-void addInode(list *lHead, char *pid){
+void addInode(struct list *lHead, char *pid){
 	char path[40] = PATH;
 	while(lHead != NULL){
 		if(!strcmp(lHead->process->pid, pid)){
@@ -88,7 +89,7 @@ void addInode(list *lHead, char *pid){
 			while(dp = readdir(dir)!=NULL){
 				if(strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
 					strcat(path, dp->d_name);
-					char message[256]
+					char message[256];
 					readlink(path, message, 256);
 					char* ptr = strtok(message, ":");
 					if(!strcmp(ptr, "socket")){
@@ -106,7 +107,7 @@ void addInode(list *lHead, char *pid){
 	}
 }
 
-node *nodeSearch(node *nHead, long inode){
+node *nodeSearch(struct node *nHead, long inode){
 	while(nHead != NULL){
 		if(nHead->inode == inode){
 			return nHead;

@@ -14,6 +14,8 @@ src/%.o: src/%.c
 $(EXEC): $(OBJ)
 	$(CC) $(OBJ) -o $@
 
+LIBS =  -lc
+
 all: $(EXEC)
 
 run: $(EXEC)

@@ -1,34 +1,28 @@
 #ifndef __LIST_H
 #define __LIST_H
 
-#include "connect.h"
-#include "proc.h"
+//#include "connect.h"
+//#include "proc.h"
 
 typedef struct list list;
 struct list{
-	struct _LIST_ENTRY *lNext;
+	struct list *lNext;
 // DATA ENTRY
-	struct __PROC_ENTRY *process;
-};
-
-typedef struct clist clist;
-struct clist{
-	struct __CONNECT_LIST *lNext;
-	struct __CONECT_ENTRY *connect;
+	struct proc *process;
 };
 
 typedef struct node node;
 struct node{
 	long inode;
 	int fd;
-	struct __NODE_LIST *nNext;
+	struct node *nNext;
 };
 
-list *newList();
-list *append(list *l);
-list *searchName(list *lHead, char* name);
-list *searchPID(list *lHead, char* pid);
-node *nodeAppend(node *n);
-node *newNode();
+struct list *newList();
+struct list *append(struct list *l);
+struct list *searchName(struct list *lHead, char* name);
+struct list *searchPID(struct list *lHead, char* pid);
+struct node *nodeAppend(struct node *n);
+struct node *newNode();
 
 #endif
