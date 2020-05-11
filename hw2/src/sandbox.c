@@ -35,37 +35,7 @@ __attribute__((constructor)) static void setup(){
 	output = foo_out("/dev/tty", O_WRONLY);
 }
 
-void* __func_hook(const char* symbol){
-	void* handle = dlopen("lib.so.6", RTLD_LAZY);
-	void* foo = dlsym(handle, symbol);
 
-	return foo;
-}
-
-int check_access(const char *path, char *symbol)
-{
-    char cwd[512];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        char root[512];
-        char leaf[512];
-        realpath(cwd, root);
-        realpath(path, leaf);
-        if (root == 0 || leaf == 0) {
-            dprintf(output, "[sandbox] %s: Access to %s is not allowed\n", symbol, path); 
-            return 0;
-        }
-        if (strcasestr(leaf, root) == 0) {
-            dprintf(output, "[sandbox] %s: Access to %s is not allowed\n", symbol, path); 
-            return 0;
-        } 
-	//	else{ 
-	//		return 1;
-	//	}
-    } 
-	else{ 
-		return 0;
-	}
-}
 
 int execl(const char *path, const char *arg, ...)
 {
@@ -341,3 +311,33 @@ DIR *opendir(const char *name)
 	
 	return 0;
 }*/
+
+void* __func_hook(const char* symbol){
+	void* handle = dlopen("lib.so.6", RTLD_LAZY);
+	void* foo = dlsym(handle, symbol);
+
+	return foo;
+}
+
+int check_access(const char *path, char *symbol)
+{
+    char cwd[512];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        char root[512];
+        char leaf[512];
+        realpath(cwd, root);
+        realpath(path, leaf);
+        if (root == 0 || leaf == 0) {
+            dprintf(output, "[sandbox] %s: Access to %s is not allowed\n", symbol, path); 
+            return 0;
+        }
+        if (strcasestr(leaf, root) == 0) {
+            dprintf(output, "[sandbox] %s: Access to %s is not allowed\n", symbol, path); 
+            return 0;
+        } 
+    } 
+	else{ 
+		return 0;
+	}
+}
+
