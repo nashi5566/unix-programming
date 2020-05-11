@@ -37,50 +37,42 @@ __attribute__((constructor)) static void setup(){
 
 
 
-int execl(const char *path, const char *arg, ...)
-{
+int execl(const char *path, const char *arg, ...){
     printf("[sandbox] execl(\"%s\")is not allowed\n", path);
 	return -1;
 }
 
-int execle(const char *path, const char *arg, ...)
-{
+int execle(const char *path, const char *arg, ...){
     printf("[sandbox] execle(\"%s\") is not allowed\n", path);
 	return -1;
 }
 
-int execlp(const char *file, const char *arg, ...)
-{
+int execlp(const char *file, const char *arg, ...){
     printf("[sandbox] execlp(\"%s\") is not allowed\n", file);
 	return -1;
 }
 
-int execv(const char *path, char *const argv[])
-{
+int execv(const char *path, char *const argv[]){
     printf("[sandbox] execv(\"%s\") is not allowed\n", path);
 	return -1;
 }
 
-int execve(const char *filename, char *const argv[], char *const envp[])
-{
+int execve(const char *filename, char *const argv[], char *const envp[]){
     printf("[sandbox] execve(\"%s\") is not allowed\n", filename);
 	return -1;
 }
 
-int execvp(const char *file, char *const argv[])
-{
+int execvp(const char *file, char *const argv[]){
     printf("[sandbox] execvp(\"%s\") is not allowed\n", file);
 	return -1;
 }
 
-int system(const char *command)
-{
+int system(const char *command){
     printf("[sandbox] system(\"%s\"): not allowed\n", command);
 	return -1;
 }
 
-FILE *fopen(const char *path, const char *mode)
-{
+FILE *fopen(const char *path, const char *mode){
     //dprintf(debug, "fopen is called: %s\n", path);
     if (check_access(path, "fopen") == 1) {
         FILE* (*foo_fopen)(const char *path, const char *mode);
@@ -93,8 +85,7 @@ FILE *fopen(const char *path, const char *mode)
 
 
 
-int __xstat(int ver, const char *path, struct stat *buf)
-{
+int __xstat(int ver, const char *path, struct stat *buf){
     dprintf(debug, "__xstat is called: %s\n", path);
 	
 	if (check_access(path, "__xstat") == 1) {
@@ -107,8 +98,7 @@ int __xstat(int ver, const char *path, struct stat *buf)
 }
 
 
-int chdir(const char *path)
-{
+int chdir(const char *path){
     dprintf(debug, "chdir is called: %s\n", path);
     if (check_access(path, "chdir") == 1) {
         int (*foo_chdir)(const char *path);
@@ -119,8 +109,7 @@ int chdir(const char *path)
 	return -1;
 }
 
-int chmod(const char *pathname, mode_t mode)
-{
+int chmod(const char *pathname, mode_t mode){
     dprintf(debug, "chmod is called: %s\n", pathname);
     if (check_access(pathname, "chmod") == 1) {
         int (*foo_chmod)(const char *pathname, mode_t mode);
@@ -131,8 +120,7 @@ int chmod(const char *pathname, mode_t mode)
 	return -1;
 }
 
-int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags)
-{
+int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags){
     dprintf(debug, "fchmodat is called: %s\n", pathname);
     if (check_access(pathname, "fchmodat")) {
         int (*foo_fchmodat)(int dirfd, const char *pathname, mode_t mode, int flags);
@@ -143,8 +131,7 @@ int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags)
 	return -1;
 }
 
-int chown(const char *pathname, uid_t owner, gid_t group)
-{
+int chown(const char *pathname, uid_t owner, gid_t group){
     dprintf(debug,"chown is called: %s\n", pathname);
     if (check_access(pathname, "chown") == 1) {
         int (*foo_chown)(const char *pathname, uid_t owner, gid_t group);
@@ -154,8 +141,7 @@ int chown(const char *pathname, uid_t owner, gid_t group)
 	return -1;
 }
 
-int open(const char *pathname, int flags, ...)
-{
+int open(const char *pathname, int flags, ...){
    // dprintf(debug, "open is called: %s\n", pathname);
     if (check_access(pathname, "open") == 1) {
         int (*foo_open)(const char *pathname, int flags, ...);
@@ -175,8 +161,7 @@ int open(const char *pathname, int flags, ...)
 	return -1;
 }
 
-int openat(int dirfd, const char *pathname, int flags, ...)
-{
+int openat(int dirfd, const char *pathname, int flags, ...){
     dprintf(debug, "openat is called: %s\n", pathname);
     if (check_access(pathname, "openat") == 1) {
         int (*foo_openat)(int dirfd, const char *pathname, int flags, ...);
@@ -196,10 +181,10 @@ int openat(int dirfd, const char *pathname, int flags, ...)
 	
 	return -1;
 }
+
 /*
-int __lxstat(int ver, const char *path, struct stat *buf)
-{
-    dprintf(debug, "__lxstat is called: %s\n", path);
+int __lxstat(int ver, const char *path, struct stat *buf){
+    dprintf(output, "__lxstat is called: %s\n", path);
     if (check_access(path, "__lxstat")) {
         int (*foo_lxstat)(int ver, const char *path, struct stat *buf);
         foo_lxstat = __func_hook("__lxstat");
@@ -208,8 +193,7 @@ int __lxstat(int ver, const char *path, struct stat *buf)
 }
 */
 /*
-int symlink(const char *target, const char *linkpath)
-{
+int symlink(const char *target, const char *linkpath){
     dprintf(debug, "symlink is called: %s, %s\n", target, linkpath);
     if (check_access(target, "symlink") && checkPathCreate(linkpath, "symlink")) {
         int (*foo_symlink)(const char *target, const char *linkpath);
@@ -219,8 +203,7 @@ int symlink(const char *target, const char *linkpath)
 	return -1;
 }*/
 
-ssize_t readlink(const char *pathname, char *buf, size_t bufsiz)
-{
+ssize_t readlink(const char *pathname, char *buf, size_t bufsiz){
     dprintf(debug, "readlink is called: %s\n", pathname);
     if (check_access(pathname, "readlink") == 1) {
         int (*foo_readlink)(const char *pathname, char *buf, size_t bufsiz);
@@ -230,8 +213,7 @@ ssize_t readlink(const char *pathname, char *buf, size_t bufsiz)
 	exit(-1);
 }
 
-int remove(const char *pathname)
-{
+int remove(const char *pathname){
     dprintf(debug, "remove is called: %s\n", pathname);
     if (check_access(pathname, "remove") == 1) {
         int (*foo_remove)(const char *pathname);
@@ -241,8 +223,7 @@ int remove(const char *pathname)
 	return -1;
 }
 
-int rename(const char *oldpath, const char *newpath)
-{
+int rename(const char *oldpath, const char *newpath){
     dprintf(debug, "rename is called: %s, %s\n", oldpath, newpath);
     if (check_access(oldpath, "rename") && check_access(newpath, "rename")) {
         int (*foo_rename)(const char *oldpath, const char *newpath);
@@ -252,8 +233,7 @@ int rename(const char *oldpath, const char *newpath)
 	return -1;
 }
 
-int rmdir(const char *pathname)
-{
+int rmdir(const char *pathname){
     dprintf(debug, "rmdir is called: %s\n", pathname);
     if (check_access(pathname, "rmdir")) {
         int (*foo_rmdir)(const char *pathname);
@@ -263,8 +243,7 @@ int rmdir(const char *pathname)
 	exit(-1);
 }
 
-int unlink(const char *pathname)
-{
+int unlink(const char *pathname){
     dprintf(debug, "unlink is called: %s\n", pathname);
     if (check_access(pathname, "unlink")) {
         int (*foo_unlink)(const char *pathname);
@@ -275,8 +254,7 @@ int unlink(const char *pathname)
 	return -1;
 }
 
-int mkdir(const char *pathname, mode_t mode)
-{
+int mkdir(const char *pathname, mode_t mode){
     dprintf(debug, "mkdir is called: %s\n", pathname);
     if (check_access(pathname, "mkdir") == 1) {
         int (*foo_mkdir)(const char *pathname, mode_t mode);
@@ -288,8 +266,7 @@ int mkdir(const char *pathname, mode_t mode)
 	return -1;
 }
 
-int link(const char *oldpath, const char *newpath)
-{
+int link(const char *oldpath, const char *newpath){
     dprintf(debug, "link is called: %s, %s\n", oldpath, newpath);
     if (check_access(oldpath, "link") && check_access(newpath, "link")) {
         int (*foo_link)(const char *oldpath, const char *newpath);
@@ -300,8 +277,7 @@ int link(const char *oldpath, const char *newpath)
 }
 
 /*
-DIR *opendir(const char *name)
-{
+DIR *opendir(const char *name){
     dprintf(debug, "opendir is called: %s\n", name);
     if (check_access(name, "opendir") == 1) {
         DIR* (*foo_opendir)(const char *name);
