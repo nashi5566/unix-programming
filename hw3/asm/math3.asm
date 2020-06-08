@@ -1,0 +1,6 @@
+mov eax, [0x600000]
+mov ebx, [0x600004]
+imul eax, 0x5
+sub ebx, 0x3
+idiv ebx
+mov [0x600008], eax
